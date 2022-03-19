@@ -67,6 +67,8 @@
       </el-table-column>
 
       <el-table-column prop="intro" label="资历"/>
+      <el-table-column prop="career" label="简介"/>
+
 
       <el-table-column prop="gmtCreate" label="添加时间" width="160"/>
 
@@ -109,7 +111,7 @@
     <!--嵌套表单的对话框,供修改讲师信息用-->
     <el-dialog
       title="修改信息"
-      style="width: 1000px"
+      style="width: 1000px;margin-top: 0"
       :visible.sync="dialogFormVisible">
       <el-form :model="teacherData">
 
@@ -137,6 +139,20 @@
           <el-input size="small" v-model="teacherData.intro" :rows="3" type="textarea"/>
         </el-form-item>
 
+        <el-form-item label="讲师头像">
+
+          <el-upload
+            class="avatar-uploader"
+            :action="url"
+            :show-file-list="false"
+            :limit="1"
+            :on-success="onSuccess">
+            <img v-if="teacherData.avatar" :src="teacherData.avatar" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+
+        </el-form-item>
+
       </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -156,6 +172,7 @@ export default {
   name: 'List',
   data() {
     return {
+      url: process.env.BASE_API + '/eduoss/fileoss/uploadAvatar',
       dialogFormVisible: false,
       listLoading: true, // 是否显示loading信息
       list: null,//查询之后接口返回集合
@@ -163,7 +180,7 @@ export default {
       limit: 10,//每页记录数
       total: 0,//总记录数
       teacherQuery: {},//条件封装对象
-      teacherData:{
+      teacherData: {
         name: '',
         sort: 0,
         level: 2,
@@ -178,13 +195,17 @@ export default {
     this.getList()
   },
   methods: {
+    //图片上传成功回调
+    onSuccess(resp) {
+      this.teacherData.avatar = resp.data.url
+    },
     //弹出供修改使用的对话框
-    showUpdate(id){
+    showUpdate(id) {
       this.dialogFormVisible = true
       teacher.selectById(id)
-      .then(result => {
-        this.teacherData = result.data.data
-      })
+        .then(result => {
+          this.teacherData = result.data.data
+        })
     },
     //修改讲师信息
     updateTeacher() {
@@ -248,5 +269,30 @@ export default {
 </script>
 
 <style scoped>
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
 
+.avatar-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+
+.avatar {
+  width: 140px;
+  height: 140px;
+  display: block;
+}
 </style>

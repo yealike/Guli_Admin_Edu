@@ -27,35 +27,27 @@
       </el-form-item>
 
       <!-- 讲师头像 -->
-<!--      <el-form-item label="讲师头像">-->
+      <el-form-item label="讲师头像">
 
-<!--        &lt;!&ndash; 头衔缩略图 &ndash;&gt;-->
-<!--        <pan-thumb :image="teacher.avatar"/>-->
-<!--        &lt;!&ndash; 文件上传按钮 &ndash;&gt;-->
-<!--        <el-button type="primary" icon="el-icon-upload" @click="imagecropperShow=true">更换头像-->
-<!--        </el-button>-->
+        <el-upload
+          :action="url"
+          list-type="picture-card"
+          :limit="1"
+          :on-success="onSuccess"
+          :auto-upload="autoUpload">
 
-<!--        &lt;!&ndash;-->
-<!--      v-show：是否显示上传组件-->
-<!--      :key：类似于id，如果一个页面多个图片上传控件，可以做区分-->
-<!--      :url：后台上传的url地址-->
-<!--      @close：关闭上传组件-->
-<!--      @crop-upload-success：上传成功后的回调 &ndash;&gt;-->
-<!--        <image-cropper-->
-<!--          v-show="imagecropperShow"-->
-<!--          :width="300"-->
-<!--          :height="300"-->
-<!--          :key="imagecropperKey"-->
-<!--          :url="BASE_API+'/oss/file/upload?host=avatar'"-->
-<!--          field="file"-->
-<!--          @close="close"-->
-<!--          @crop-upload-success="cropSuccess"/>-->
+          <i slot="default" class="el-icon-plus"></i>
 
-<!--      </el-form-item>-->
+        </el-upload>
 
-      <!--修改和保存共用一个组件-->
+      </el-form-item>
+
+      <!--修改和保存不用一个组件-->
       <el-form-item>
-        <el-button :disabled="saveBtnDisabled" type="primary" @click="addTeacher">保存</el-button>
+        <el-button
+          :disabled="saveBtnDisabled"
+          type="primary"
+          @click="addTeacher">保存</el-button>
       </el-form-item>
 
     </el-form>
@@ -65,6 +57,7 @@
 
 <script>
 import teacher from '@/api/teacher/teacher'
+
 export default {
   name: 'Save',
   data() {
@@ -77,27 +70,29 @@ export default {
         intro: '',
         avatar: ''
       },
+      autoUpload: true,
+      url: process.env.BASE_API+'/eduoss/fileoss/uploadAvatar',
       // 防止表单重复提交-判断按钮是否禁用
-      saveBtnDisabled:false
+      saveBtnDisabled: false
     }
   },
-  methods:{
-    saveOrUpdate(){
-
+  methods: {
+    onSuccess(resp){
+      this.teacher.avatar = resp.data.url
     },
     // 添加教师
-    addTeacher(){
+    addTeacher() {
       teacher.addTeacher(this.teacher)
-      .then(result => {//添加成功
-        // 提示信息
-        this.$message({
-          type: 'success',
-          message: '添加成功!'
-        })
-        // 回到列表页面-路由跳转
-        this.$router.push('/teacher/table')
-      }).catch(error => {
-        console.log('添加失败！',error)
+        .then(result => {//添加成功
+          // 提示信息
+          this.$message({
+            type: 'success',
+            message: '添加成功!'
+          })
+          // 回到列表页面-路由跳转
+          this.$router.push('/teacher/table')
+        }).catch(error => {
+        console.log('添加失败！', error)
       })
     }
   }

@@ -1,7 +1,8 @@
 // 引入utils中的request封装axios
 import request from '@/utils/request'
+import * as url from 'url'
 
-const teacher_api = '/education/teacher'
+const teacher_api = '/eduservice/teacher'
 export default {
   // 讲师列表(条件查询分页)
   getTeacherListPage(current, limit, teacherQuery) {
@@ -31,7 +32,7 @@ export default {
     })
   },
   //修改讲师信息
-  updateTeacher(teacher){
+  updateTeacher(teacher) {
     return request({
       url: `${teacher_api}/updateTeacher`,
       method: 'post',
@@ -39,10 +40,18 @@ export default {
     })
   },
   // 根据id查询讲师
-  selectById(id){
+  selectById(id) {
     return request({
       url: `${teacher_api}/getTeacher/${id}`,
-      method: 'get',
+      method: 'get'
+    })
+  },
+  //上传图片
+  uploadImg(file) {
+    return request({
+      url: `/eduoss/fileoss/uploadAvatar`,
+      method: 'post',
+      data: file
     })
   }
 }
