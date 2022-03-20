@@ -1,0 +1,47 @@
+<template>
+  <div class="app-container">
+    <h2 style="text-align: center">发布新课程</h2>
+
+    <!--步骤条-->
+    <el-steps :active="2" process-status="wait" align-center style="margin-bottom: 40px;">
+      <el-step title="填写课程基本信息"></el-step>
+      <el-step title="创建课程大纲"></el-step>
+      <el-step title="最终发布"></el-step>
+    </el-steps>
+
+    <el-form label-width="120px">
+      <el-form-item>
+        <el-button @click="previous">上一步</el-button>
+        <el-button :disabled="saveBtnDisabled" type="primary" @click="next">下一步</el-button>
+      </el-form-item>
+    </el-form>
+
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Chapter',
+  data() {
+    return {
+      saveBtnDisabled: false // 保存按钮是否禁用
+    }
+  },
+  // 当路由发生变化的时候，我们应该有一个监听，监听获取参数
+  methods: {
+    // 上一步
+    previous(){
+      this.$router.push({ path: '/course/info/1' })
+    },
+    // 根据课程ID判断是保存还是修改
+    next() {
+      // 跳转到第二步
+      this.$router.push({ path: '/course/publish/1' })
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

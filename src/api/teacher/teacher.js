@@ -46,6 +46,13 @@ export default {
       method: 'get'
     })
   },
+  // 查询所有讲师
+  getListTeacher(){
+    return request({
+      url: `${teacher_api}/findAll`,
+      method: 'get'
+    })
+  },
   //上传图片
   uploadImg(file) {
     return request({
