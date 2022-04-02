@@ -127,6 +127,28 @@ export const constantRouterMap = [
 
     ]
   },
+  // 统计数据
+  {
+    path: '/sta',
+    component: Layout,
+    redirect: '/sta/table',
+    name: '统计分析',
+    meta: { title: '统计分析', icon: '课程管理' },
+    children: [
+      {
+        path: 'create',
+        name: '生成数据',
+        component: () => import('@/views/edu/sta/create'),
+        meta: { title: '生成数据', icon: '分类' }
+      },
+      {
+        path: 'show',
+        name: '图表显示',
+        component: () => import('@/views/edu/sta/show'),
+        meta: { title: '图表显示', icon: '添加课程' }
+      }
+    ]
+  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]
